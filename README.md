@@ -5,8 +5,8 @@ arduino leonardo x 1
 74HC4076 16-channel multiplexer board x 3  
 QYF-TM1638 board x 1  
 10K potentiometer x 48  
+external DC 5V adapter x 1  
 
 # Wiring Schematics
 ![picture](https://github.com/i2make/midi_controller_48/blob/main/midi_controller_48_small.png)
 # step 1
-
