@@ -54,5 +54,13 @@ Change configuration
 ```
 
 # step 3
-If the value of the potentiometer moves in the opposite direction
+- If the value of the potentiometer moves in the opposite direction  
+file: MIDI_Controller_48.ino
+```cpp
+a[boardN][portsN].current = map(a[boardN][portsN].current, 0, 1023, 0, 127);
+```
+change
+```cpp
+a[boardN][portsN].current = map(a[boardN][portsN].current, 0, 1023, 127, 0);
+```
 
