@@ -19,3 +19,13 @@ Install MIDIUSB library
 ![picture](https://github.com/i2make/midi_controller_48/blob/main/manage_library.png)
 ![picture](https://github.com/i2make/midi_controller_48/blob/main/install_midiusb.png)
 
+- select using ports
+'''c++
+/// select using port number
+//#define USING_PORTS_16
+//#define USING_PORTS_32
+#define USING_PORTS_48
+//#define USING_PORTS_64
+'''
+
+- change channel, midi cc
