@@ -1,5 +1,7 @@
 # midi_controller_48
 48 pot midi cc control surface  
+[youtube](https://youtu.be/69zrLJu5BMI)  
+
 # used parts
 arduino leonardo x 1  
 74HC4076 16-channel multiplexer board x 3  
