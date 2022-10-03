@@ -15,4 +15,7 @@ If you don't use it, you don't even need an DC 5V adapter.
 ![picture](https://github.com/i2make/midi_controller_48/blob/main/midi_controller_48_small.png)
 
 # step 1
+Install MIDIUSB library
+![picture](https://github.com/i2make/midi_controller_48/blob/main/manage_library.png)
+![picture](https://github.com/i2make/midi_controller_48/blob/main/install_midiusb.png)
 
