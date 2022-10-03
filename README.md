@@ -54,4 +54,5 @@ Change configuration
 ```
 
 # step 3
+If the value of the potentiometer moves in the opposite direction
 
