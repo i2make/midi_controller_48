@@ -6,9 +6,13 @@ arduino leonardo x 1
 QYF-TM1638 board x 1  
 10K potentiometer x 48  
 external DC 5V adapter x 1  
-## The tm1638 board may not be used.
+
+## The QYF-TM1638 board may not be used.  
+If you don't use it, you don't even need an DC 5V adapter.
 
 # Wiring Schematics
 ![picture](https://github.com/i2make/midi_controller_48/blob/main/midi_controller_48.jpg)
 ![picture](https://github.com/i2make/midi_controller_48/blob/main/midi_controller_48_small.png)
+
 # step 1
+
