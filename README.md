@@ -74,3 +74,11 @@ a[boardN][portsN].current = map(a[boardN][portsN].current, 0, 1023, 0, 127);
                                                                 |
                                                         adjust 1010 ~ 1023
 ```
+# MIDI_Controller_48_REV_0.2
+button :
+S1 ~ S4 : display mode
+S5 : change channel
+S6 : change control number
+S9 ~ S12 : change preset
+S15 : YES
+S16 : NO
