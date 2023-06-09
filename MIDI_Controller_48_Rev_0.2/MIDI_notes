@@ -1,0 +1,126 @@
+//
+MIDI Song Position Pointer message
+A MIDI event that carries the MIDI song position pointer message tells a MIDI device to cue to a point in the MIDI sequence to be ready to play.
+
+This message belongs to the category of MIDI system common messages.
+
+This message consists of three bytes of data. The first byte is the status byte and has a hexadecimal value of 0xF2 signifying that this is a song position pointer message. Two bytes follow the status byte. These two bytes are combined in a 14-bit value to show the position in the song to cue to. The top bit of each of the two bytes is not used. Thus, the value of the position to cue to is between 0x0000 and 0x3FFF. The position represents the MIDI beat, where a sequence always starts on beat zero and each beat is a 16th note. Thus, the device will cue to a specific 16th note.
+
+Each 16th note can easily be interpreted into time as the MIDI device should know the number of MIDI ticks per quarter note and the length of a MIDI tick (see Time division (of a MIDI file) for more information).
+
+The following is an example of a MIDI song position pointer message.
+
+0xF2 0x00 0x08
+
+The status byte 0xF2 shows that this is a song position pointer message. 0x00 and 0x08 have the binary representations 00000000 and 00001000 and so they form the 14-bit value 00000000001000, which is 8 decimal. 8 sixteenth notes is 2 quarter notes, but since the first quarter note occurs at beat zero, this message will prompt the MIDI device to cue to the third quarter note at beat 2.
+
+//
+MIDI Song Position Pointer message
+MIDI song position pointer 메시지를 전달하는 MIDI 이벤트는 MIDI device가 MIDI 시퀀스의 한 point에 신호를 보내 연주할 준비가 되었는지 알려줍니다.
+
+이 메시지는 MIDI system common message 범주에 속합니다.
+
+이 메시지는 3-byte의 데이터로 구성됩니다. 첫 번째 바이트는 status 바이트이며 song position pointer 메시지임을 나타내는 0xF2의 16진수 값을 갖습니다. status 바이트 다음에 2-byte가 옵니다.
+이 두 바이트는 14비트 값으로 결합되어 신호를 보낼 song의 position을 ​​표시합니다. 두 바이트 각각의 최상위 비트는 사용되지 않습니다. 따라서 cue에 대한 위치 값은 0x0000에서 0x3FFF 사이입니다. Position은 MIDI beat를 나타내며 시퀀스는 항상 beat 0에서 시작하고 각 beat는 16분 음표입니다. 따라서 장치는 특정 16분음표로 신호를 보냅니다.
+
+MIDI device는 4분 음표당 MIDI tick 수와 MIDI tick 길이를 알아야 하므로 각 16분음표를 시간으로 쉽게 해석할 수 있습니다(자세한 내용은 MIDI file의 Time division 참조).
+
+다음은 MIDI song position pointer 메시지의 예입니다.
+
+0xF2 0x00 0x08
+
+status 바이트 0xF2는 이것이 song position pointer 메시지임을 보여줍니다.
+0x00 및 0x08은 이진 표현 00000000 및 00001000을 가지므로 십진수 8인 14비트 값 0000000001000을 형성합니다.
+16분 음표 8개는 4분 음표 2개입니다.
+이 메시지는 첫 번째 음표가 beat 0에서 발생하기 때문에 MIDI device는 beat 2에서 세 번째 음표로 신호를 보냅니다.
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Time division (of a MIDI file)
+The time division of a MIDI file, also known as "resolution of a MIDI file", is an indication of how MIDI ticks should be translated into time, contained in the thirteenth and fourteenth bytes in the header chunk of the MIDI file.
+
+There are two possible translations of these two bytes (16 bits). If the top bit of the 16 bits is 0, then the time division is in "ticks per beat" (or “pulses per quarter note”). If the top bit is 1, then the time division is in "frames per second".
+
+Pulses per quarter note (PPQ)
+When the top bit of the time division bytes is 0, the time division is in ticks per beat. The remaining 15 bits are the number of MIDI ticks per beat (per quarter note). If, for example, these 15 bits compute to the number 60, then the time division is 60 ticks per beat and the length of one tick is
+
+1 tick = microseconds per beat / 60
+
+The variable "microseconds per beat" is specified by a MIDI event carrying the set tempo meta message. If it is not specified then it is 500,000 microseconds by default, which is equivalent to 120 beats per minute. In the example above, if the MIDI time division is 60 ticks per beat and if the microseconds per beat is 500,000, then 1 tick = 500,000 / 60 = 8333.33 microseconds.
+
+Frames per second
+When the top bit of the time division bytes is 1, the remaining 15 bits have to be broken in two pieces. The top remaining 7 bits (the rest of the top byte) represent the number of frames per second and could be 24, 25, 29.97 (represented by 29), or 30. The low byte (the low 8 bits) describes the number of ticks per frame. Thus, if, for example, there are 24 frames per second and there are 100 ticks per frame, since there are 1,000,000 microseconds in a second, one tick is equal to
+
+1 tick = 1,000,000 / (24 * 100) = 416.66 microseconds
+
+Thus, when the time division top bit is 1, the length of a tick is strictly defined by the two time division bytes. The first byte is the frames per second and the second byte is the number of ticks per frame, which is enough to specify the tick length exactly. This is not so when the top bit of the time division bytes is 0 and the time division is in pulses per quarter note. The time division in this case defines the ticks per beat, but nothing in the time division specifies the number of beats per second. A MIDI event should be used to specify the number of beats per second (or the length of a beat), or it should be left up to the MIDI device to set the tempo (120 beats per minute by default, as mentioned above).
+
+//
+Time division(of a MIDI file)
+"MIDI 파일의 resolution"이라고도 하는 MIDI 파일의 time division은 MIDI tick이 MIDI 파일의 header chunk에 있는 13번째, 14번째 바이트에 포함된 시간으로 변환되는 방식을 나타냅니다.
+
+이 두 바이트(16비트)의 두 가지 가능한 변환이 있습니다. 16비트의 상위 비트가 0이면 time division은 "박자당 tick"(또는 "4분음표당 펄스")입니다. 상위 비트가 1이면 time division은 "초당 프레임 수"입니다.
+
+4분음표당 펄스 수(PPQ)
+time division 바이트의 상위 비트가 0일 때 time division은 비트당 tick 단위입니다. 나머지 15비트는 비트당(4분 음표당) MIDI tick 수입니다. 예를 들어, 이 15비트가 숫자 60으로 계산되면 time division은 비트당 60틱이고 한 tick의 길이는 다음과 같습니다.
+
+1 tick = 비트당 마이크로초 / 60
+
+"비트당 마이크로초" 변수는 설정된 tempo meta message를 전달하는 MIDI 이벤트에 의해 지정됩니다. 지정하지 않으면 기본적으로 500,000마이크로초이며, 이는 분당 120회 비트에 해당합니다. 위의 예에서 MIDI time division이 비트당 60틱이고 비트당 마이크로초가 500,000이면 1 tick = 500,000 / 60 = 8333.33마이크로초입니다.
+
+초당 프레임
+time division 바이트의 최상위 비트가 1일 때 나머지 15비트는 두 조각으로 나누어져야 합니다. 나머지 상위 7비트(상위 바이트의 나머지)는 초당 프레임 수를 나타내며 24, 25, 29.97(29로 표시) or 30일 수 있습니다. 하위 바이트(하위 8비트)는 초당 프레임 수를 나타냅니다. 프레임당 tick. 따라서 예를 들어 초당 24프레임이 있고 프레임당 100 tick이 있는 경우 1초는 1,000,000마이크로초이므로 1tick은 다음과 같습니다.
+
+1 tick = 1,000,000 / (24 * 100) = 416.66마이크로초
+
+따라서 time division 최상위 비트가 1일 때 tkc의 길이는 2개의 time division 바이트로 엄격하게 정의됩니다. 첫 번째 바이트는 초당 프레임 수이고 두 번째 바이트는 프레임당 tick 수로 tick 길이를 정확히 지정하기에 충분합니다. time division 바이트의 최상위 비트가 0이고 time division이 4분 음표당 펄스인 경우에는 그렇지 않습니다. 이 경우 time division은 비트당 tick을 정의하지만 time division의 어떤 것도 초당 비트 수를 지정하지 않습니다. MIDI 이벤트는 초당 비트 수(또는 비트 길이)를 지정하는 데 사용되거나 템포를 설정하는 MIDI 장치에 맡겨야 합니다(위에서 언급한 것처럼 기본적으로 분당 120비트).
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+//CIN   MIDI_x Size     Description
+//0x0   1, 2 or 3       Miscellaneous function codes. Reserved for future extensions.
+//0x1   1, 2 or 3       Cable events. Reserved for future expansion.
+//0x2   2               Two-byte System Common messages like MTC, SongSelect, etc.
+//0x3   3               Three-byte System Common messages like SPP, etc.
+//0x4   3               SysEx starts or continues
+//0x5   1               Single-byte System Common Message or SysEx ends with following single byte.
+//0x6   2               SysEx ends with following two bytes.
+//0x7   3               SysEx ends with following three bytes.
+
+// command
+//0x80 ~ 0x8F   3               Note-off
+//0x90 ~ 0x9F   3               Note-on
+//0xA0 ~ 0xAF   3               Poly-KeyPress
+//0xB0 ~ 0xBF   3               Control Change
+//0xC0 ~ 0xCF   2               Program Change
+//0xD0 ~ 0xDF   2               Channel Pressure
+//0xE0 ~ 0xEF   3               PitchBend Change
+//0xF0 ~ 0xFF   1               Single Byte (non-musical commands)
+
+Command	Meaning	                # parameters	param 1	        param 2
+0x80	Note-off	            2	            key	velocity
+0x90	Note-on                 2	            key	veolcity
+0xA0	Aftertouch	            2	            key	touch
+0xB0	Continuous controller	2	            controller #	controller value
+0xC0	Patch change	        2	            instrument #
+0xD0	Channel Pressure	    1	            pressure
+0xE0	Pitch bend	            2	            lsb (7 bits)	msb (7 bits)
+0xF0	(non-musical commands)
+
+command	meaning	# param
+0xF0	start of system exclusive message	variable
+0xF1	MIDI Time Code Quarter Frame (Sys Common)
+0xF2	Song Position Pointer (Sys Common)
+0xF3	Song Select (Sys Common)
+0xF4	???
+0xF5	???
+0xF6	Tune Request (Sys Common)
+0xF7	end of system exclusive message	0
+0xF8	Timing Clock (Sys Realtime)
+0xFA	Start (Sys Realtime)
+0xFB	Continue (Sys Realtime)
+0xFC	Stop (Sys Realtime)
+0xFD	???
+0xFE	Active Sensing (Sys Realtime)
+0xFF	System Reset (Sys Realtime)
